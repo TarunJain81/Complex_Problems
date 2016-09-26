@@ -1,0 +1,126 @@
+Zigzagify a Matrix. As part of its compression algorithm, the JPEG standard unrolls a matrix into a vector
+
+along antidiagonals of alternating direction:
+
+Your task is to take a matrix (not necessarily
+
+square) and return it in unrolled form. As an
+
+example:
+
+[1 2 3 4
+
+5 6 7 8
+
+9 1 2 3]
+
+should yield
+
+[1, 2, 5, 9, 6, 3, 4, 7, 1, 2, 8, 3]
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CSharp.Assignment03
+{
+    public static class ZigzagifyMatrix
+    {
+        
+        public static object[] Zigzagify(object[,] matrix)
+        {
+            Direction direction = Direction.Horizontal;
+            int column = 0;
+            int row = 0;
+            int i = 0;
+            int rowSize = matrix.GetLength(0);
+            int columnSize = matrix.GetLength(1);
+            object[] array = new object[rowSize * columnSize];
+            do
+            {
+                array[i] = matrix[row, column];
+                i++;
+            } while (NextIndex(ref row, ref column, ref direction, rowSize, columnSize));
+            return array;
+        }
+
+        /// <summary>
+        /// Get the next index
+        /// </summary>
+        /// <param name="row">value types</param>
+        /// <param name="column"></param>
+        /// <param name="direction"></param>
+        /// <param name="rowSize"></param>
+        /// <param name="columnSize"></param>
+        /// <returns></returns>
+        public static bool NextIndex(ref int row, ref int column, ref Direction direction, int rowSize, int columnSize)
+        {
+            if (row >= rowSize - 1 && column >= columnSize - 1)
+            {
+                return false;
+            }
+
+            switch(direction)
+            {
+                case Direction.Horizontal:
+                    column++;
+                    direction = row == 0 ? Direction.DiagonalDown : Direction.DiagonalUp;
+                    break;
+                case Direction.Vertical:
+                    row++;
+                    direction = column == 0 ? Direction.DiagonalUp : Direction.DiagonalDown;
+                    break;
+                case Direction.DiagonalDown:
+                    column--;
+                    row++;
+                    if (column <= 0)
+                    {
+                        if (row < rowSize - 1)
+                        {
+                            direction = Direction.Vertical;
+                        }
+                        else
+                        {
+                            direction = Direction.Horizontal;
+                        }
+                    }
+                    else if (row >= rowSize - 1)
+                    {
+                        direction = Direction.Horizontal;
+                    }
+                    break;
+
+                case Direction.DiagonalUp:
+                    column++;
+                    row--;
+                    if (row <= 0)
+                    {
+                        if (column < columnSize - 1)
+                        {
+                            direction = Direction.Horizontal;
+                        }
+                        else
+                        {
+                            direction = Direction.Vertical;
+                        }
+                    }
+                    else if (column >= columnSize - 1)
+                    {
+                        direction = Direction.Vertical;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        public enum Direction
+        {
+            Horizontal,
+            Vertical,
+            DiagonalUp,
+            DiagonalDown
+        }
+    }
+}
