@@ -1,0 +1,91 @@
+
+package table;
+
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import java.util.*;
+
+/**
+ *
+ * @author JainT
+ */
+public class StringReverse {
+    
+    public static List<String> permutation(String s)
+    {
+     List<String> results = new ArrayList<>();
+    
+     permutation("",s,results);
+    
+    return results;
+   
+   }
+    
+    private static  void permutation(String p,String s,List<String> r)
+    {
+        if(s.length()==0)
+            r.add(p);
+        
+        else
+        {
+            for(int i=0;i<s.length();i++)
+            {
+                permutation(p+s.charAt(i),s.substring(0, i)+s.substring(i+1, s.length()),r);
+            }
+        }
+    }
+        public static void main(String[] args) {
+            
+          //List<String> l =   permutation("run");
+          
+          //  System.out.println(l);
+            
+             List<int[]> l =   permutation(new int[]{1,2,3});
+          
+            System.out.println(l);
+          
+          
+            
+        }
+        
+        
+         public static List<int[]> permutation(int[] a)
+         {
+           List<int[]> results = new ArrayList<>();
+           
+           permutation(a,0,results);
+    
+             return results;
+        
+         }
+         
+          private static void permutation(int[] a,int s ,List<int[]> r)
+          {
+                if(s>a.length-1)
+                  r.add(a.clone());
+              
+              else
+              {
+                  for(int i=s;i<a.length;i++)
+                  {
+                      swap(a,s,i);
+                      permutation(a,s+1,r);
+                      swap(a,s,i);
+                  }
+              }
+              
+          }
+          
+          
+          public static void swap(int[] a,int m,int n )
+          {
+              int t = a[m];
+              
+              a[m]= a[n];
+              
+              a[n] = t;
+          }
+         
+        }
+       
+    
+  
